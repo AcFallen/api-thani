@@ -25,6 +25,45 @@ export const registro = async (req,res)=>{
 
     return res.status(201).json({
         mensaje: 'Usuario registrado',
-        usuario: nuevoUsuario
+        content: nuevoUsuario
     })
+}
+
+export const login = async (req,res)=>{
+    const validacion = loginUsuario.validate(req.body)
+
+    if(validacion.error){
+        return res.status(400).json({
+            error: validacion.error.details[0].message
+        })
+    }
+
+    const { correo , password } = validacion.value
+
+    const usuarioEncontrado = await conexion.usuario.findUniqueOrThrow({
+        where:{
+            correo
+        }
+    })
+
+    const passwordValido = await bcryptjs.compare(password,usuarioEncontrado.password)
+
+    if(passwordValido){
+        const token = jwt.sign({
+            id: usuarioEncontrado.id,
+            correo: usuarioEncontrado.correo
+        },process.env.JWT_SECRET_KEY,{
+            expiresIn: '8h'
+        })
+
+        return res.status(200).json({
+            mensaje: 'Usuario logueado',
+            content: token
+        })
+    }else{
+        return res.status(400).json({
+            error: 'Usuario o contraseña incorrectos'
+        })
+    }
+
 }

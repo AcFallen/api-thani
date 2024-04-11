@@ -2,15 +2,15 @@
 CREATE TYPE "TipoUsuario" AS ENUM ('ADMIN', 'EMPLEADO', 'CLIENTE');
 
 -- CreateTable
-CREATE TABLE "Usuario" (
+CREATE TABLE "usuarios" (
     "id" SERIAL NOT NULL,
     "correo" TEXT NOT NULL,
     "nombre" TEXT,
     "password" TEXT NOT NULL,
     "tipo_usuario" "TipoUsuario" NOT NULL DEFAULT 'CLIENTE',
 
-    CONSTRAINT "Usuario_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "usuarios_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Usuario_correo_key" ON "Usuario"("correo");
+CREATE UNIQUE INDEX "usuarios_correo_key" ON "usuarios"("correo");

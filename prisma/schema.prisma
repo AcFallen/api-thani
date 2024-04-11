@@ -19,6 +19,8 @@ model Usuario {
   nombre      String?
   password  String
   tipoUsuario TipoUsuario @default(CLIENTE) @map("tipo_usuario")
+
+  @@map("usuarios")
 } 
 
 

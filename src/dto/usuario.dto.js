@@ -6,7 +6,7 @@ export const registroUsuario = Joi.object({
     nombre: Joi.string().required(),
     correo: Joi.string().email().required(),
     password: Joi.string().required(),
-    TipoUsuario: Joi.string().valid(...Object.values(TipoUsuario)).required(),
+    tipoUsuario: Joi.string().valid(...Object.values(TipoUsuario)).required(),
 });
 
 

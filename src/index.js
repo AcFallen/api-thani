@@ -7,6 +7,7 @@ app.use(express.json())
 
 
 app.use(Rutas.usuarioRouter)
+app.use(Rutas.categoriaRouter)
 
 app.listen(3000)
 

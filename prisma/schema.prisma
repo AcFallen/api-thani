@@ -14,15 +14,48 @@ datasource db {
 }
 
 model Usuario {
-  id        Int   @id @default(autoincrement())
-  correo     String   @unique
+  id          Int         @id @default(autoincrement())
+  correo      String      @unique
   nombre      String?
-  password  String
+  password    String
   tipoUsuario TipoUsuario @default(CLIENTE) @map("tipo_usuario")
 
   @@map("usuarios")
-} 
+}
 
+model Producto {
+  id          Int     @id @default(autoincrement())
+  nombre      String
+  propiedades String
+  beneficios  String
+  modoDeUso String @map("modo_de_uso")
+  imagen      String?
+
+  categoria   Categoria @relation(fields: [categoriaId], references: [id])
+  categoriaId Int      @map("categoria_id")
+
+  detalles DetalleProducto[]
+
+  @@map("productos")
+}
+
+model DetalleProducto {
+  id               Int      @id @default(autoincrement())
+  unidadDeMedida String  @map("unidad_de_medida")
+  precio           Decimal @db.Decimal(10, 2)
+  producto         Producto @relation(fields: [productoId], references: [id])
+  productoId       Int    @map("producto_id")
+
+  @@map("detalles_productos")
+}
+
+model Categoria {
+  id        Int        @id @default(autoincrement())
+  nombre    String
+  productos Producto[]
+
+  @@map("categorias")
+}
 
 enum TipoUsuario {
   ADMIN

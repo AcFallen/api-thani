@@ -43,7 +43,7 @@ model DetalleProducto {
   id               Int      @id @default(autoincrement())
   unidadDeMedida String  @map("unidad_de_medida")
   precio           Decimal @db.Decimal(10, 2)
-  producto         Producto @relation(fields: [productoId], references: [id])
+  producto         Producto @relation(fields: [productoId], references: [id] , onDelete: Cascade)
   productoId       Int    @map("producto_id")
 
   @@map("detalles_productos")

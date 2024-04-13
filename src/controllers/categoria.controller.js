@@ -43,7 +43,7 @@ export async function eliminarCategoria(req, res) {
         }
     });
 
-    return res.json({
+    return res.status(204).json({
         message: "Categoria eliminada exitosamente",
         content: categoriaEliminada
     });

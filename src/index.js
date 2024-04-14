@@ -1,9 +1,13 @@
 import express from 'express'
+import cors from 'cors'
 import * as Rutas from './router/index.js'
 
 const app = express()
 
+app.use(cors())
+
 app.use(express.json())
+
 
 
 app.use(Rutas.usuarioRouter)

@@ -14,6 +14,8 @@ app.use(Rutas.usuarioRouter)
 app.use(Rutas.categoriaRouter)
 app.use(Rutas.productoRouter)
 
-app.listen(80)
+const port = process.env.PORT || 80;
 
-console.log('Server listen on port',80)
+app.listen(port)
+
+console.log('Server listen on port', port)

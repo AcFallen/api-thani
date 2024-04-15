@@ -5,7 +5,7 @@ import {validarToken, validarAdmin} from '../validarToken.js'
 
 export const categoriaRouter = Router();
 
-categoriaRouter.post('/crear-categoria',AsyncHandler(crearCategoria));
-categoriaRouter.get('/listar-categorias', validarToken, validarAdmin, AsyncHandler(listarCategorias));
-categoriaRouter.delete('/eliminar-categoria/:id',AsyncHandler(eliminarCategoria));
+categoriaRouter.post('/crear-categoria', validarToken, validarAdmin, AsyncHandler(crearCategoria));
+categoriaRouter.get('/listar-categorias', AsyncHandler(listarCategorias));
+categoriaRouter.delete('/eliminar-categoria/:id', validarToken, validarAdmin ,AsyncHandler(eliminarCategoria));
 

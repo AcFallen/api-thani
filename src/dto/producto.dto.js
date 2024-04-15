@@ -19,7 +19,7 @@ export const eliminarProductoDto = Joi.object({
 });
 
 export const actualizarProductoDto = Joi.object({
-    id: Joi.number().required(),
+
     nombre: Joi.string().optional(),
     propiedades: Joi.string().optional(),
     beneficios: Joi.string().optional(),
@@ -30,7 +30,7 @@ export const actualizarProductoDto = Joi.object({
     detalles : Joi.array().items(Joi.object({
         unidadDeMedida: Joi.string().required(),
         precio: Joi.number().precision(2).required(),
-        productoId: Joi.number().required()}))
+        id: Joi.number().optional()}))
 });
 
 

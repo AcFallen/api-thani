@@ -1,5 +1,9 @@
 import { conexion } from "../conectores.js";
-import { crearProductoDto, eliminarProductoDto } from "../dto/producto.dto.js";
+import {
+  crearProductoDto,
+  eliminarProductoDto,
+  actualizarProductoDto,
+} from "../dto/producto.dto.js";
 
 export async function crearProducto(req, res) {
   const validacion = crearProductoDto.validate(req.body);
@@ -12,8 +16,6 @@ export async function crearProducto(req, res) {
 
   await conexion.$transaction(async (cursor) => {
     const { detalles, ...producto } = validacion.value;
-
-    
 
     const productoCreado = await cursor.producto.create({
       data: producto,
@@ -32,7 +34,6 @@ export async function crearProducto(req, res) {
 
   return res.status(201).json({
     message: "Producto creado exitosamente",
-
   });
 }
 
@@ -67,17 +68,57 @@ export async function actualizarProducto(req, res) {
     });
   }
 
-  const productoActualizado = await conexion.producto.update({
+  const productoEncontrado = await conexion.producto.findUnique({
     where: {
       id: Number(id),
     },
-    data: validacion.value,
   });
 
-  return res.status(200).json({
-    message: "Producto actualizado exitosamente",
-    content: productoActualizado,
+  if (!productoEncontrado) {
+    return res.status(404).json({
+      message: "Producto no encontrado",
+    });
+  }
+  const { detalles, ...productoData } = validacion.value;
+
+  const operaciones = detalles.map((detalle) => {
+    if (detalle.id) {
+      return conexion.detalleProducto.update({
+        where: { id: detalle.id },
+        data: detalle,
+      });
+    } else {
+      return conexion.detalleProducto.create({
+        data: {
+          ...detalle,
+          productoId: Number(id),
+        },
+      });
+    }
   });
+  
+  operaciones.push(
+    conexion.producto.update({
+      where: {
+        id: Number(id),
+      },
+      data: productoData,
+    })
+  );
+  
+  try {
+    const resultado = await conexion.$transaction(operaciones);
+    const productoActualizado = resultado[resultado.length - 1];
+  
+    return res.status(200).json({
+      message: "Producto actualizado exitosamente",
+      content: productoActualizado,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error al actualizar el producto",
+    });
+  }
 }
 
 export async function listarUnProducto(req, res) {
@@ -88,8 +129,8 @@ export async function listarUnProducto(req, res) {
     },
     include: {
       detalles: true,
-      categoria: true
-    }
+      categoria: true,
+    },
   });
 
   if (!producto) {
@@ -104,14 +145,14 @@ export async function listarUnProducto(req, res) {
 }
 
 export async function listarProductos(req, res) {
-    const productos = await conexion.producto.findMany({
-        include: {
-            detalles: true,
-            categoria: true
-        }
-    });
-    
-    return res.status(200).json({
-        content: productos,
-    });
-    }
+  const productos = await conexion.producto.findMany({
+    include: {
+      detalles: true,
+      categoria: true,
+    },
+  });
+
+  return res.status(200).json({
+    content: productos,
+  });
+}

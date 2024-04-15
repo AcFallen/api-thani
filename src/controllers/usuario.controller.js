@@ -51,7 +51,8 @@ export const login = async (req,res)=>{
     if(passwordValido){
         const token = jwt.sign({
             id: usuarioEncontrado.id,
-            correo: usuarioEncontrado.correo
+            correo: usuarioEncontrado.correo,
+            tipo: usuarioEncontrado.tipoUsuario
         },process.env.JWT_SECRET_KEY,{
             expiresIn: '8h'
         })

@@ -16,7 +16,7 @@ export const validarToken = async (req, res, next) => {
   }
 
   try {
-    const payload = jwt.verify(token, process.env.SECRET_KEY);
+    const payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
     req.user = payload;
 
     console.log(payload);

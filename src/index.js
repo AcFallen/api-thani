@@ -14,6 +14,6 @@ app.use(Rutas.usuarioRouter)
 app.use(Rutas.categoriaRouter)
 app.use(Rutas.productoRouter)
 
-app.listen(3000)
+app.listen(80)
 
-console.log('Server listen on port',3000)
+console.log('Server listen on port',80)

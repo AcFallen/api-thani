@@ -19,8 +19,6 @@ export const validarToken = async (req, res, next) => {
     const payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
     req.user = payload;
 
-    console.log(payload);
-
     next();
   } catch (error) {
     return res.status(401).json({ message: "Token invalida", content: error });

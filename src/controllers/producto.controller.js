@@ -3,6 +3,7 @@ import {
   crearProductoDto,
   eliminarProductoDto,
   actualizarProductoDto,
+  eliminarDetalleProductoDto
 } from "../dto/producto.dto.js";
 
 export async function crearProducto(req, res) {
@@ -154,5 +155,27 @@ export async function listarProductos(req, res) {
 
   return res.status(200).json({
     content: productos,
+  });
+}
+
+export async function eliminarDetalleProducto(req, res) {
+  const validacion = eliminarDetalleProductoDto.validate(req.params);
+
+  if (validacion.error) {
+    return res.status(400).json({
+      content: validacion.error.details[0].message,
+    });
+  }
+
+  const detalleEliminado = await conexion.detalleProducto.delete({
+    where: {
+      id: Number(validacion.value.id),
+      productoId: Number(validacion.value.productoId),
+    },
+  });
+
+  return res.status(204).json({
+    message: "Detalle eliminado exitosamente",
+    content: detalleEliminado,
   });
 }

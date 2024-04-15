@@ -33,4 +33,7 @@ export const actualizarProductoDto = Joi.object({
         id: Joi.number().optional()}))
 });
 
-
+export const eliminarDetalleProductoDto = Joi.object({
+    id: Joi.number().required(),
+    productoId: Joi.number().required()
+});
